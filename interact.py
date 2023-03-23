@@ -238,60 +238,24 @@ class Interact:
 
     def video_loop(self):
         if self.Isopen:
-            if self.point_index>9:
-                self.quit()
-
             # 从摄像头读取照片
             if(self.camera.capture()):  
-                # 同时检测到两只眼睛
-                if(self.camera.detectEye()): 
-                    #检测瞳孔
-                    lellipse_parameter=pc.ellipse_calib(self.camera.lEyeImg,self.ellipse_threshold)
-                    if not isinstance(lellipse_parameter,int):
-                        #检测光斑
-                        lSpotParameter = pc.SegmentSpotClib(self.camera.lEyeImg,self.purkin_threshold,lellipse_parameter)
-                        #画图
-                        self.camera.frame,lellipse_parameter,lSpotParameter = pc.Imshow(self.camera.frame,self.camera.lEyeParam,lellipse_parameter,lSpotParameter)
-                        #在空间显示
-                        self.show_img(self.camera.lEyeImg,self.panel_l,"eye_pupil",self.ellipse_threshold)
-                        self.show_img(self.camera.lEyeImg,self.panel_pl,"eye_purkin",self.purkin_threshold)
-                        #估计视线
+                if self.camera.detectFace():
+                    # 左眼图像self.camera.lEyeImg，左眼ROI参数self.camera.lEyeParam=[x,y,w,h]
+                
+                    # 右眼图像self.camera.rEyeImg，左眼ROI参数self.camera.rEyeParam=[x,y,w,h]
+                    
+                    #相机坐标系下三维坐标，脸部中心self.camera.faceCenter，左眼中心self.camera.leyeCenter，右眼中心self.camera.reyeCenter
+                    #这个坐标有问题
+                    print(self.camera.faceCenter,self.camera.leyeCenter,self.camera.reyeCenter)
+
+                self.show_img(self.camera.visualizer.image,self.panel,"face")  
                         
 
-                    rellipse_parameter=pc.ellipse_calib(self.camera.rEyeImg,self.ellipse_threshold)
-                    if not isinstance(rellipse_parameter,int):
-                        rSpotParameter = pc.SegmentSpotClib(self.camera.rEyeImg,self.purkin_threshold,rellipse_parameter)
-                        self.camera.frame,rellipse_parameter,rSpotParameter = pc.Imshow(self.camera.frame,self.camera.rEyeParam,rellipse_parameter,rSpotParameter)
-                        self.show_img(self.camera.rEyeImg,self.panel_r,"eye_pupil",self.ellipse_threshold)
-                        self.show_img(self.camera.rEyeImg,self.panel_pr,"eye_purkin",self.purkin_threshold)
+                          
 
-                    if self.Issample and (not isinstance(lellipse_parameter,int)) and (not isinstance(rellipse_parameter,int)):
-                        if not self.isFinishOne:
-                            self.info.append({
-                                self.pic_count:{
-                                    'left_ellipse_parameter':lellipse_parameter,
-                                    'left_purkin_parameter':lSpotParameter,
-                                    'right_ellipse_parameter':rellipse_parameter,
-                                    'right_purkin_parameter':rSpotParameter
-                                },
-                            })
-                            cv2.imwrite('sources/position'+str(self.point_index)+'/'+str(self.point_index)+'_'+str(self.pic_count)+'l'+'.bmp',self.camera.lEyeImg)
-                            cv2.imwrite('sources/position'+str(self.point_index)+'/'+str(self.point_index)+'_'+str(self.pic_count)+'r'+'.bmp',self.camera.rEyeImg)
-                            self.pic_count+=1
-                            if self.pic_count>=self.max_pic_num:
-                                self.isFinishOne=True
-                                self.pic_count = 0
-                                self.Save_json('sources/position'+str(self.point_index)+'/'+'data.json')
-                                self.Draw_bg()
-                                if self.point_index>=9:
-                                    self.quit()
-
-                if self.camera.detectFace():
-                    self.show_img(self.camera.frame,self.panel,"face")
+                
 
         self.root.after(1, self.video_loop)
     
 
-if __name__=="__main__":
-    a=Interact(size='1024x500')
-    a.run()

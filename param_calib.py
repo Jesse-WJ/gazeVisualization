@@ -1,5 +1,6 @@
 import cv2
 from math import sqrt
+import numpy as np
 
 def ellipse_calib(img,threshold):
     """
@@ -7,11 +8,15 @@ def ellipse_calib(img,threshold):
     :parameter img1：输入为一张灰度图片
     :return temp1:返回参数包含瞳孔中心，外切矩形的长宽和瞳孔拟合椭圆的偏角
     """
+    if np.max(img) is None:
+        return 0
     img1 = img.copy()
 
     # 二值化 第二个参数阈值可调  可多次修改，找到最佳值
     ret, th = cv2.threshold(img1, threshold, 255, cv2.THRESH_BINARY)
 
+    if np.max(th) is None:
+        return 0
     # 形态学处理
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (10, 10))
     erosion = cv2.morphologyEx(th, cv2.MORPH_OPEN, kernel)

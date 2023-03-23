@@ -126,6 +126,7 @@ class FaceModel:
                                      useExtrinsicGuess=True,
                                      flags=cv2.SOLVEPNP_ITERATIVE)
         # 检测到的人脸坐标系到相机坐标系的旋转矩阵
+        #  -0.090601,   -0.013439,     0.92265
         rot = Rotation.from_rotvec(rvec)
         # 相机捕获图像中的人脸的头部姿态(旋转矩阵和平移向量)
         face.head_pose_rot = rot
@@ -154,6 +155,6 @@ class FaceModel:
              self.MOUTH_INDICES])].mean(axis=0)
         face.reye.center = face.model3d[self.REYE_INDICES].mean(axis=0)
         face.leye.center = face.model3d[self.LEYE_INDICES].mean(axis=0)
-
+        # print(face.center,face.leye.center,face.reye.center)
 
 MODEL3D = FaceModel()

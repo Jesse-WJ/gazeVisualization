@@ -3,7 +3,7 @@ Description:
 Author: Jesse
 Date: 2023-03-23 09:57:05
 LastEditors: Jesse
-LastEditTime: 2023-03-23 16:33:32
+LastEditTime: 2023-03-23 17:08:47
 '''
 import cv2
 import argparse
@@ -44,6 +44,7 @@ class FaceDetector:
         faces = self.face_estimator.detect_faces(undistorted)
         for face in faces:
             self.face_estimator.estimate_face(undistorted, face)
+            
             self.visualizer.draw_bbox(face.bbox)
 
             self.visualizer.draw_points(face.landmarks,
