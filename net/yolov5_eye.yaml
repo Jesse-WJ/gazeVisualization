@@ -1,0 +1,8 @@
+train: E:/code/yolov5/yolov5-master/VOCdata/dataSet_path/train.txt
+val: E:/code/yolov5/yolov5-master/VOCdata/dataSet_path/val.txt
+
+# number of classes
+nc: 1
+
+# class names
+names: ["eye"]
