@@ -11,7 +11,7 @@ import dlib
 import numpy as np
 # import yacs.config
 
-from common import Face
+from common.face import Face
 
 
 class LandmarkEstimator:
