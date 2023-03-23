@@ -3,8 +3,8 @@ image_height: 1080
 camera_matrix:
     rows: 3
     cols: 3
-    data: [4.4801e+03, 0., 1030.62072724993,
-           0., 4.4801e+03, 366.970915584939,
+    data: [4707.137, 0., 997.03,
+           0., 4542.297, 336.48,
            0., 0., 1.]
 
 distortion_coefficients:
